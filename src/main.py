@@ -31,7 +31,7 @@ async def get_car(id: int):
         "data": database.get_car(id)
     }
 
-@app.put('/car')
+@app.post('/car')
 async def save_car(car: Car):
     return database.save_car(car)
 
@@ -46,7 +46,7 @@ async def get_accident(id: int):
         "data": database.get_accident(id)
     }
 
-@app.put('/accident')
+@app.post('/accident')
 async def save_accident(accident: Accident):
     return database.save_accident(accident)
 
@@ -61,7 +61,7 @@ async def get_car_accidents(id: int):
         "data": database.get_car_accidents(id)
     }
 
-@app.put('/car/accidents')
+@app.post('/car/accidents')
 async def save_car_accident(accident_car: AccidentCar):
     return database.save_accident_car(accident_car)
 
