@@ -1,4 +1,5 @@
 import psycopg2
+from psycopg2 import sql
 from data_types import *
 
 class Database:
@@ -27,6 +28,22 @@ class Database:
         if row:
             return Car(model=row[0], year=row[1], color=row[2], number=row[3], type=row[4])
 
+        return None
+
+    def update_car(self, car: CarUpdate):
+        fields = {k: v for k, v in car.model_dump().items() if k != "id" and v is not None}
+        if not fields:
+            return False
+
+        query = sql.SQL("UPDATE cars SET {updates} WHERE id = %(id)s").format(
+            updates=sql.SQL(", ").join(
+                sql.Composed([sql.Identifier(k), sql.SQL(" = "), sql.Placeholder(k)]) for k in fields
+            )
+        )
+        params = {**fields, "id": car.id}
+
+        self.cursor.execute(query, params)
+        self.connection.commit()
         return None
 
     def delete_car(self, id: int):

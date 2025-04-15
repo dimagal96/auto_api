@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Body, Path
 from database import Database
 from data_types import *
 
@@ -34,6 +34,10 @@ async def get_car(id: int):
 @app.post('/car')
 async def save_car(car: Car):
     return database.save_car(car)
+
+@app.put('/car')
+async def put_car(car: CarUpdate = Body(...)):
+    return database.update_car(car)
 
 @app.delete('/car')
 async def delete_car(id: int):

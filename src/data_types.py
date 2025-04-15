@@ -8,6 +8,14 @@ class Car(BaseModel):
     number: str
     type: int
 
+class CarUpdate(BaseModel):
+    id: int
+    model: str = None
+    year: int = None
+    color: str = None
+    number: str = None
+    type: int = None
+
 class Accident(BaseModel):
     date: datetime
     location: str
