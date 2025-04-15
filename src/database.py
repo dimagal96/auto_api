@@ -113,6 +113,22 @@ class Database:
         self.connection.commit()
         return accident_id
 
+    def update_accident(self, accident: AccidentUpdate):
+        fields = {k: v for k, v in accident.model_dump().items() if k != "id" and v is not None}
+        if not fields:
+            return False
+
+        query = sql.SQL("UPDATE accidents SET {updates} WHERE id = %(id)s").format(
+            updates=sql.SQL(", ").join(
+                sql.Composed([sql.Identifier(k), sql.SQL(" = "), sql.Placeholder(k)]) for k in fields
+            )
+        )
+        params = {**fields, "id": accident.id}
+
+        self.cursor.execute(query, params)
+        self.connection.commit()
+        return None
+
     def delete_accident(self, id: int):
         query = "DELETE FROM accidents WHERE id = %s"
         self.cursor.execute(query, (id,))

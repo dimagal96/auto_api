@@ -21,6 +21,12 @@ class Accident(BaseModel):
     location: str
     description: str
 
+class AccidentUpdate(BaseModel):
+    id: int
+    date: datetime = None
+    location: str = None
+    description: str = None
+
 class AccidentCar(BaseModel):
     accident_id: int
     car_id: int

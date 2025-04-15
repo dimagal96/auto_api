@@ -54,6 +54,10 @@ async def get_accident(id: int):
 async def save_accident(accident: Accident):
     return database.save_accident(accident)
 
+@app.put('/accident')
+async def put_accident(accident: AccidentUpdate = Body(...)):
+    return database.update_accident(accident)
+
 @app.delete('/accident')
 async def delete_accident(id: int):
     return database.delete_accident(id)
