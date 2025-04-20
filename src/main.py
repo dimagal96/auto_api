@@ -6,14 +6,21 @@ from data_types import *
 
 load_dotenv()
 
+DB_NAME = os.getenv("DATABASE_NAME")
+DB_USER = os.getenv("DATABASE_USER")
+DB_PASSWORD = os.getenv("DATABASE_PASSWORD")
+DB_HOST = os.getenv("DATABASE_HOST")
+DB_PORT = os.getenv("DATABASE_PORT")
+DB_SCHEMA = os.getenv("DATABASE_SCHEMA")
+
 app = FastAPI()
 database = Database(
-    database="postgres",
-    user="postgres",
-    password=os.getenv('DATABASE_PASSWORD'),
-    host="localhost",
-    port=5432,
-    options="-c search_path={}".format(os.getenv('DATABASE_SCHEMA'))
+    database=DB_NAME,
+    user=DB_USER,
+    password=DB_PASSWORD,
+    host=DB_HOST,
+    port=DB_PORT,
+    options=f"-c search_path={DB_SCHEMA}"
 )
 
 @app.get('/cars')
@@ -80,3 +87,7 @@ async def delete_car_accident(id: int):
 @app.get('/types')
 async def get_types():
     return database.get_types()
+
+@app.post('/types')
+async def save_type(type: Type):
+    return database.save_type(type)

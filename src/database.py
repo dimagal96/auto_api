@@ -184,3 +184,15 @@ class Database:
             })
 
         return types
+
+    def save_type(self, type: Type):
+        query = """
+            INSERT INTO types (name)
+            VALUES (%s)
+            RETURNING id
+        """
+
+        self.cursor.execute(query, (type.name,))
+        type_id = self.cursor.fetchone()[0]
+        self.connection.commit()
+        return type_id
